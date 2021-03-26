@@ -42,6 +42,7 @@ type ClusterConfig struct {
 	EtcdKeyPath         string
 	EtcdInsecurePort    int
 	MasterIPs           []string
+	EtcdIPs             []string
 	MasterInternalIPs   []string
 	MasterName          string
 	// Deprecated: use NamespaceConfig.DeleteStaleNamespaces instead.
