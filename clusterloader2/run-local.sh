@@ -4,6 +4,7 @@ KUBE_SSH_USER=root \
 ETCD_CERTIFICATE=/etc/kubernetes/pki/etcd/server.crt \
 ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     go run cmd/clusterloader.go \
+    -v=4 \
     --kubeconfig=$HOME/.kube/config \
     --testconfig=testing/load/config.yaml \
     --provider=local \
