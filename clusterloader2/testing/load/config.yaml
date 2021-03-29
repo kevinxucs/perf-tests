@@ -754,30 +754,30 @@ steps:
 #    objectBundle:
 #      - basename: daemonset
 #        objectTemplatePath: daemonset.yaml
-#  - namespaceRange:
-#      min: 1
-#      max: {{$namespaces}}
-#    replicasPerNamespace: 0
-#    tuningSet: RandomizedDeletionTimeLimited
-#    objectBundle:
-#      - basename: small-job
-#        objectTemplatePath: job.yaml
-#  - namespaceRange:
-#      min: 1
-#      max: {{$namespaces}}
-#    replicasPerNamespace: 0
-#    tuningSet: RandomizedDeletionTimeLimited
-#    objectBundle:
-#      - basename: medium-job
-#        objectTemplatePath: job.yaml
-#  - namespaceRange:
-#      min: 1
-#      max: {{$namespaces}}
-#    replicasPerNamespace: 0
-#    tuningSet: RandomizedDeletionTimeLimited
-#    objectBundle:
-#      - basename: big-job
-#        objectTemplatePath: job.yaml
+  - namespaceRange:
+      min: 1
+      max: {{$namespaces}}
+    replicasPerNamespace: 0
+    tuningSet: RandomizedDeletionTimeLimited
+    objectBundle:
+      - basename: small-job
+        objectTemplatePath: job.yaml
+  - namespaceRange:
+      min: 1
+      max: {{$namespaces}}
+    replicasPerNamespace: 0
+    tuningSet: RandomizedDeletionTimeLimited
+    objectBundle:
+      - basename: medium-job
+        objectTemplatePath: job.yaml
+  - namespaceRange:
+      min: 1
+      max: {{$namespaces}}
+    replicasPerNamespace: 0
+    tuningSet: RandomizedDeletionTimeLimited
+    objectBundle:
+      - basename: big-job
+        objectTemplatePath: job.yaml
 #  # If both StatefulSets and PVs were enabled we need to delete PVs manually.
 #  {{if $ENABLE_PVS}}
 #  - namespaceRange:
