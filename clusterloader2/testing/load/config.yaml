@@ -221,10 +221,10 @@ steps:
       Params:
         apiVersion: apps/v1
         kind: Deployment
-    - Identifier: WaitForRunningStatefulSets
-      Params:
-        apiVersion: apps/v1
-        kind: StatefulSet
+#    - Identifier: WaitForRunningStatefulSets
+#      Params:
+#        apiVersion: apps/v1
+#        kind: StatefulSet
     - Identifier: WaitForRunningDaemonSets
       Params:
         apiVersion: apps/v1
@@ -321,32 +321,32 @@ steps:
         ReplicasMax: {{$SMALL_GROUP_SIZE}}
         SvcName: small-service
         CpuRequest: 5m
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: {{$SMALL_STATEFUL_SETS_PER_NAMESPACE}}
-    tuningSet: RandomizedSaturationTimeLimited
-    objectBundle:
-      - basename: small-statefulset
-        objectTemplatePath: statefulset_service.yaml
-      - basename: small-statefulset
-        objectTemplatePath: statefulset.yaml
-        templateFillMap:
-          ReplicasMin: {{$SMALL_GROUP_SIZE}}
-          ReplicasMax: {{$SMALL_GROUP_SIZE}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: {{$MEDIUM_STATEFUL_SETS_PER_NAMESPACE}}
-    tuningSet: RandomizedSaturationTimeLimited
-    objectBundle:
-      - basename: medium-statefulset
-        objectTemplatePath: statefulset_service.yaml
-      - basename: medium-statefulset
-        objectTemplatePath: statefulset.yaml
-        templateFillMap:
-          ReplicasMin: {{$MEDIUM_GROUP_SIZE}}
-          ReplicasMax: {{$MEDIUM_GROUP_SIZE}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: {{$SMALL_STATEFUL_SETS_PER_NAMESPACE}}
+#    tuningSet: RandomizedSaturationTimeLimited
+#    objectBundle:
+#      - basename: small-statefulset
+#        objectTemplatePath: statefulset_service.yaml
+#      - basename: small-statefulset
+#        objectTemplatePath: statefulset.yaml
+#        templateFillMap:
+#          ReplicasMin: {{$SMALL_GROUP_SIZE}}
+#          ReplicasMax: {{$SMALL_GROUP_SIZE}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: {{$MEDIUM_STATEFUL_SETS_PER_NAMESPACE}}
+#    tuningSet: RandomizedSaturationTimeLimited
+#    objectBundle:
+#      - basename: medium-statefulset
+#        objectTemplatePath: statefulset_service.yaml
+#      - basename: medium-statefulset
+#        objectTemplatePath: statefulset.yaml
+#        templateFillMap:
+#          ReplicasMin: {{$MEDIUM_GROUP_SIZE}}
+#          ReplicasMax: {{$MEDIUM_GROUP_SIZE}}
   - namespaceRange:
       min: 1
       max: {{$namespaces}}
@@ -386,7 +386,7 @@ steps:
   - Method: WaitForControlledPodsRunning
     Instances:
      - Identifier: WaitForRunningDeployments
-     - Identifier: WaitForRunningStatefulSets
+#     - Identifier: WaitForRunningStatefulSets
      - Identifier: WaitForRunningDaemonSets
      - Identifier: WaitForRunningJobs
     Params:
@@ -597,28 +597,28 @@ steps:
         ReplicasMax: {{MultiplyInt $SMALL_GROUP_SIZE 1.5}}
         SvcName: small-service
         CpuRequest: 5m
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: {{$SMALL_STATEFUL_SETS_PER_NAMESPACE}}
-    tuningSet: RandomizedScalingTimeLimited
-    objectBundle:
-      - basename: small-statefulset
-        objectTemplatePath: statefulset.yaml
-        templateFillMap:
-          ReplicasMin: {{MultiplyInt $SMALL_GROUP_SIZE 0.5}}
-          ReplicasMax: {{MultiplyInt $SMALL_GROUP_SIZE 1.5}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: {{$MEDIUM_STATEFUL_SETS_PER_NAMESPACE}}
-    tuningSet: RandomizedScalingTimeLimited
-    objectBundle:
-      - basename: medium-statefulset
-        objectTemplatePath: statefulset.yaml
-        templateFillMap:
-          ReplicasMin: {{MultiplyInt $MEDIUM_GROUP_SIZE 0.5}}
-          ReplicasMax: {{MultiplyInt $MEDIUM_GROUP_SIZE 1.5}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: {{$SMALL_STATEFUL_SETS_PER_NAMESPACE}}
+#    tuningSet: RandomizedScalingTimeLimited
+#    objectBundle:
+#      - basename: small-statefulset
+#        objectTemplatePath: statefulset.yaml
+#        templateFillMap:
+#          ReplicasMin: {{MultiplyInt $SMALL_GROUP_SIZE 0.5}}
+#          ReplicasMax: {{MultiplyInt $SMALL_GROUP_SIZE 1.5}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: {{$MEDIUM_STATEFUL_SETS_PER_NAMESPACE}}
+#    tuningSet: RandomizedScalingTimeLimited
+#    objectBundle:
+#      - basename: medium-statefulset
+#        objectTemplatePath: statefulset.yaml
+#        templateFillMap:
+#          ReplicasMin: {{MultiplyInt $MEDIUM_GROUP_SIZE 0.5}}
+#          ReplicasMax: {{MultiplyInt $MEDIUM_GROUP_SIZE 1.5}}
 {{if not $DISABLE_DAEMONSETS}}
   - namespaceRange:
       min: 1
@@ -670,7 +670,7 @@ steps:
   - Method: WaitForControlledPodsRunning
     Instances:
     - Identifier: WaitForRunningDeployments
-    - Identifier: WaitForRunningStatefulSets
+#    - Identifier: WaitForRunningStatefulSets
     - Identifier: WaitForRunningDaemonSets
     - Identifier: WaitForRunningJobs
     Params:
@@ -815,7 +815,7 @@ steps:
   - Method: WaitForControlledPodsRunning
     Instances:
      - Identifier: WaitForRunningDeployments
-     - Identifier: WaitForRunningStatefulSets
+#     - Identifier: WaitForRunningStatefulSets
      - Identifier: WaitForRunningDaemonSets
      - Identifier: WaitForRunningJobs
     Params:
