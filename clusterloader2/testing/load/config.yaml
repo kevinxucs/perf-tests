@@ -726,26 +726,26 @@ steps:
     - basename: small-deployment
       objectTemplatePath: networkpolicy.yaml
     {{end}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 0
-    tuningSet: RandomizedDeletionTimeLimited
-    objectBundle:
-      - basename: small-statefulset
-        objectTemplatePath: statefulset.yaml
-      - basename: small-statefulset
-        objectTemplatePath: statefulset_service.yaml
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 0
-    tuningSet: RandomizedDeletionTimeLimited
-    objectBundle:
-      - basename: medium-statefulset
-        objectTemplatePath: statefulset.yaml
-      - basename: medium-statefulset
-        objectTemplatePath: statefulset_service.yaml
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 0
+#    tuningSet: RandomizedDeletionTimeLimited
+#    objectBundle:
+#      - basename: small-statefulset
+#        objectTemplatePath: statefulset.yaml
+#      - basename: small-statefulset
+#        objectTemplatePath: statefulset_service.yaml
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 0
+#    tuningSet: RandomizedDeletionTimeLimited
+#    objectBundle:
+#      - basename: medium-statefulset
+#        objectTemplatePath: statefulset.yaml
+#      - basename: medium-statefulset
+#        objectTemplatePath: statefulset_service.yaml
   - namespaceRange:
       min: 1
       max: 1
