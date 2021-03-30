@@ -16,4 +16,4 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     --etcd-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
     --enable-prometheus-server \
     --tear-down-prometheus-server \
-    --testoverrides=./testing/overrides/no_statefulset.yaml
+    --testoverrides=./testing/overrides/stateless_only.yaml

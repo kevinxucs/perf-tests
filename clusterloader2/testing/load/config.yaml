@@ -60,12 +60,12 @@
 
 # Jobs are enabled. Reduce the number of small, medium, big deployments per namespace.
 # Ensure non zero or negative after subtraction.
-{{$smallDeploymentsPerNamespace := MaxInt 0 (SubtractInt $smallDeploymentsPerNamespace 1)}}
-{{$mediumDeploymentsPerNamespace := MaxInt 0 (SubtractInt $mediumDeploymentsPerNamespace 1)}}
-{{$bigDeploymentsPerNamespace := MaxInt 0 (SubtractInt $bigDeploymentsPerNamespace 1)}}
+#{{$smallDeploymentsPerNamespace := MaxInt 0 (SubtractInt $smallDeploymentsPerNamespace 1)}}
+#{{$mediumDeploymentsPerNamespace := MaxInt 0 (SubtractInt $mediumDeploymentsPerNamespace 1)}}
+#{{$bigDeploymentsPerNamespace := MaxInt 0 (SubtractInt $bigDeploymentsPerNamespace 1)}}
 
 # Disable big jobs on small clusters.
-{{$bigJobsPerNamespace := IfThenElse $IS_SMALL_CLUSTER 0 1}}
+#{{$bigJobsPerNamespace := IfThenElse $IS_SMALL_CLUSTER 0 1}}
 
 # The minimal number of pods to be used to measure various things like
 # pod-startup-latency or scheduler-throughput. The purpose of it is to avoid
@@ -205,13 +205,13 @@ steps:
       mediumServicesPerNamespace: {{DivideInt (AddInt $mediumDeploymentsPerNamespace 1) 2}}
       bigServicesPerNamespace: {{DivideInt (AddInt $bigDeploymentsPerNamespace 1) 2}}
 
-- name: Creating PriorityClass for DaemonSets
-  phases:
-  - replicasPerNamespace: 1
-    tuningSet: Sequence
-    objectBundle:
-      - basename: daemonset-priorityclass
-        objectTemplatePath: daemonset-priorityclass.yaml
+#- name: Creating PriorityClass for DaemonSets
+#  phases:
+#  - replicasPerNamespace: 1
+#    tuningSet: Sequence
+#    objectBundle:
+#      - basename: daemonset-priorityclass
+#        objectTemplatePath: daemonset-priorityclass.yaml
 
 - name: Starting measurement for waiting for pods
   measurements:
@@ -225,14 +225,14 @@ steps:
 #      Params:
 #        apiVersion: apps/v1
 #        kind: StatefulSet
-    - Identifier: WaitForRunningDaemonSets
-      Params:
-        apiVersion: apps/v1
-        kind: DaemonSet
-    - Identifier: WaitForRunningJobs
-      Params:
-        apiVersion: batch/v1
-        kind: Job
+#    - Identifier: WaitForRunningDaemonSets
+#      Params:
+#        apiVersion: apps/v1
+#        kind: DaemonSet
+#    - Identifier: WaitForRunningJobs
+#      Params:
+#        apiVersion: batch/v1
+#        kind: Job
     Params:
       action: start
       labelSelector: group = load
@@ -347,39 +347,39 @@ steps:
 #        templateFillMap:
 #          ReplicasMin: {{$MEDIUM_GROUP_SIZE}}
 #          ReplicasMax: {{$MEDIUM_GROUP_SIZE}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 1
-    tuningSet: RandomizedSaturationTimeLimited
-    objectBundle:
-      - basename: small-job
-        objectTemplatePath: job.yaml
-        templateFillMap:
-          ReplicasMin: {{$SMALL_GROUP_SIZE}}
-          ReplicasMax: {{$SMALL_GROUP_SIZE}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 1
-    tuningSet: RandomizedSaturationTimeLimited
-    objectBundle:
-      - basename: medium-job
-        objectTemplatePath: job.yaml
-        templateFillMap:
-          ReplicasMin: {{$MEDIUM_GROUP_SIZE}}
-          ReplicasMax: {{$MEDIUM_GROUP_SIZE}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: {{$bigJobsPerNamespace}}
-    tuningSet: RandomizedSaturationTimeLimited
-    objectBundle:
-      - basename: big-job
-        objectTemplatePath: job.yaml
-        templateFillMap:
-          ReplicasMin: {{$BIG_GROUP_SIZE}}
-          ReplicasMax: {{$BIG_GROUP_SIZE}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 1
+#    tuningSet: RandomizedSaturationTimeLimited
+#    objectBundle:
+#      - basename: small-job
+#        objectTemplatePath: job.yaml
+#        templateFillMap:
+#          ReplicasMin: {{$SMALL_GROUP_SIZE}}
+#          ReplicasMax: {{$SMALL_GROUP_SIZE}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 1
+#    tuningSet: RandomizedSaturationTimeLimited
+#    objectBundle:
+#      - basename: medium-job
+#        objectTemplatePath: job.yaml
+#        templateFillMap:
+#          ReplicasMin: {{$MEDIUM_GROUP_SIZE}}
+#          ReplicasMax: {{$MEDIUM_GROUP_SIZE}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: {{$bigJobsPerNamespace}}
+#    tuningSet: RandomizedSaturationTimeLimited
+#    objectBundle:
+#      - basename: big-job
+#        objectTemplatePath: job.yaml
+#        templateFillMap:
+#          ReplicasMin: {{$BIG_GROUP_SIZE}}
+#          ReplicasMax: {{$BIG_GROUP_SIZE}}
 
 - name: Waiting for pods to be running
   measurements:
@@ -387,8 +387,8 @@ steps:
     Instances:
      - Identifier: WaitForRunningDeployments
 #     - Identifier: WaitForRunningStatefulSets
-     - Identifier: WaitForRunningDaemonSets
-     - Identifier: WaitForRunningJobs
+#     - Identifier: WaitForRunningDaemonSets
+#     - Identifier: WaitForRunningJobs
     Params:
       action: gather
 
@@ -631,39 +631,39 @@ steps:
         templateFillMap:
           Image: k8s.gcr.io/pause:3.1
 {{end}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 1
-    tuningSet: RandomizedScalingTimeLimited
-    objectBundle:
-      - basename: small-job
-        objectTemplatePath: job.yaml
-        templateFillMap:
-          ReplicasMin: {{MultiplyInt $SMALL_GROUP_SIZE 0.5}}
-          ReplicasMax: {{MultiplyInt $SMALL_GROUP_SIZE 1.5}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 1
-    tuningSet: RandomizedScalingTimeLimited
-    objectBundle:
-      - basename: medium-job
-        objectTemplatePath: job.yaml
-        templateFillMap:
-          ReplicasMin: {{MultiplyInt $MEDIUM_GROUP_SIZE 0.5}}
-          ReplicasMax: {{MultiplyInt $MEDIUM_GROUP_SIZE 1.5}}
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: {{$bigJobsPerNamespace}}
-    tuningSet: RandomizedScalingTimeLimited
-    objectBundle:
-      - basename: big-job
-        objectTemplatePath: job.yaml
-        templateFillMap:
-          ReplicasMin: {{MultiplyInt $BIG_GROUP_SIZE 0.5}}
-          ReplicasMax: {{MultiplyInt $BIG_GROUP_SIZE 1.5}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 1
+#    tuningSet: RandomizedScalingTimeLimited
+#    objectBundle:
+#      - basename: small-job
+#        objectTemplatePath: job.yaml
+#        templateFillMap:
+#          ReplicasMin: {{MultiplyInt $SMALL_GROUP_SIZE 0.5}}
+#          ReplicasMax: {{MultiplyInt $SMALL_GROUP_SIZE 1.5}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 1
+#    tuningSet: RandomizedScalingTimeLimited
+#    objectBundle:
+#      - basename: medium-job
+#        objectTemplatePath: job.yaml
+#        templateFillMap:
+#          ReplicasMin: {{MultiplyInt $MEDIUM_GROUP_SIZE 0.5}}
+#          ReplicasMax: {{MultiplyInt $MEDIUM_GROUP_SIZE 1.5}}
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: {{$bigJobsPerNamespace}}
+#    tuningSet: RandomizedScalingTimeLimited
+#    objectBundle:
+#      - basename: big-job
+#        objectTemplatePath: job.yaml
+#        templateFillMap:
+#          ReplicasMin: {{MultiplyInt $BIG_GROUP_SIZE 0.5}}
+#          ReplicasMax: {{MultiplyInt $BIG_GROUP_SIZE 1.5}}
 
 - name: Waiting for objects to become scaled
   measurements:
@@ -671,8 +671,8 @@ steps:
     Instances:
     - Identifier: WaitForRunningDeployments
 #    - Identifier: WaitForRunningStatefulSets
-    - Identifier: WaitForRunningDaemonSets
-    - Identifier: WaitForRunningJobs
+#    - Identifier: WaitForRunningDaemonSets
+#    - Identifier: WaitForRunningJobs
     Params:
       action: gather
 
@@ -754,30 +754,30 @@ steps:
 #    objectBundle:
 #      - basename: daemonset
 #        objectTemplatePath: daemonset.yaml
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 0
-    tuningSet: RandomizedDeletionTimeLimited
-    objectBundle:
-      - basename: small-job
-        objectTemplatePath: job.yaml
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 0
-    tuningSet: RandomizedDeletionTimeLimited
-    objectBundle:
-      - basename: medium-job
-        objectTemplatePath: job.yaml
-  - namespaceRange:
-      min: 1
-      max: {{$namespaces}}
-    replicasPerNamespace: 0
-    tuningSet: RandomizedDeletionTimeLimited
-    objectBundle:
-      - basename: big-job
-        objectTemplatePath: job.yaml
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 0
+#    tuningSet: RandomizedDeletionTimeLimited
+#    objectBundle:
+#      - basename: small-job
+#        objectTemplatePath: job.yaml
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 0
+#    tuningSet: RandomizedDeletionTimeLimited
+#    objectBundle:
+#      - basename: medium-job
+#        objectTemplatePath: job.yaml
+#  - namespaceRange:
+#      min: 1
+#      max: {{$namespaces}}
+#    replicasPerNamespace: 0
+#    tuningSet: RandomizedDeletionTimeLimited
+#    objectBundle:
+#      - basename: big-job
+#        objectTemplatePath: job.yaml
 #  # If both StatefulSets and PVs were enabled we need to delete PVs manually.
 #  {{if $ENABLE_PVS}}
 #  - namespaceRange:
@@ -816,8 +816,8 @@ steps:
     Instances:
      - Identifier: WaitForRunningDeployments
 #     - Identifier: WaitForRunningStatefulSets
-     - Identifier: WaitForRunningDaemonSets
-     - Identifier: WaitForRunningJobs
+#     - Identifier: WaitForRunningDaemonSets
+#     - Identifier: WaitForRunningJobs
     Params:
       action: gather
   {{if $ENABLE_PVS}}
@@ -829,13 +829,13 @@ steps:
       timeout: 15m
   {{end}}
 
-- name: Deleting PriorityClass for DaemonSets
-  phases:
-    - replicasPerNamespace: 0
-      tuningSet: Sequence
-      objectBundle:
-        - basename: daemonset-priorityclass
-          objectTemplatePath: daemonset-priorityclass.yaml
+#- name: Deleting PriorityClass for DaemonSets
+#  phases:
+#    - replicasPerNamespace: 0
+#      tuningSet: Sequence
+#      objectBundle:
+#        - basename: daemonset-priorityclass
+#          objectTemplatePath: daemonset-priorityclass.yaml
 
 - module:
     path: modules/services.yaml
