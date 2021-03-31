@@ -18,7 +18,7 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     go run cmd/clusterloader.go \
     -v=4 \
     --kubeconfig=$HOME/.kube/km-config \
-    --testconfig=${TEST_CONFIG[$test]}} \
+    --testconfig=${TEST_CONFIG[$test]} \
     --provider=kubemark \
     --nodes=60 \
     --report-dir=report_${test}_kubemark-cluster \
