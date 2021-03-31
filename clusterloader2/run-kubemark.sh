@@ -7,7 +7,7 @@ TESTS_CONFIG[load]="${ROOT}/testing/load/config.yaml"
 TESTS_CONFIG[density]="${ROOT}/testing/density/config.yaml"
 
 test="$1"
-if [[ -z "$tests" ]]; then
+if [[ -z "$test" ]]; then
     echo "missing test"
     exit 0
 fi
