@@ -3,8 +3,8 @@
 ROOT=$(dirname ${BASH_SOURCE[0]})
 
 declare -A TEST_CONFIG
-TESTS_CONFIG[load]="${ROOT}/testing/load/config.yaml"
-TESTS_CONFIG[density]="${ROOT}/testing/density/config.yaml"
+TEST_CONFIG[load]="${ROOT}/testing/load/config.yaml"
+TEST_CONFIG[density]="${ROOT}/testing/density/config.yaml"
 
 test="$1"
 if [[ -z "$test" ]]; then
@@ -28,4 +28,4 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     --etcd-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
     --enable-prometheus-server \
     --tear-down-prometheus-server=false \
-    --testoverrides=./testing/overrides/stateless_only.yaml
+    --testoverrides=${ROOT}/testing/overrides/stateless_only.yaml
