@@ -20,9 +20,12 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     --kubeconfig=$HOME/.kube/km-config \
     --testconfig=${TEST_CONFIG[$test]} \
     --provider=kubemark \
+    --provider-configs="ROOT_KUBECONFIG=$HOME/.kube/config"
     --nodes=60 \
     --report-dir=report_${test}_kubemark-cluster \
     --masterip=k8s-km-01.intern.kevxu.net \
     --etcd-certificate=/etc/kubernetes/pki/apiserver-etcd-client.crt \
     --etcd-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
+    --enable-prometheus-server \
+    --tear-down-prometheus-server=false \
     --testoverrides=${ROOT}/testing/overrides/stateless_only.yaml
