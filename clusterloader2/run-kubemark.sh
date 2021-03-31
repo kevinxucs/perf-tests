@@ -13,6 +13,7 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     --masterip=k8s-km-01.intern.kevxu.net \
     --etcd-certificate=/etc/kubernetes/pki/apiserver-etcd-client.crt \
     --etcd-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
-    --enable-prometheus-server \
-    --tear-down-prometheus-server=true \
+    # kubemark provider does not support prometheus server
+    # --enable-prometheus-server \
+    # --tear-down-prometheus-server=true \
     --testoverrides=./testing/overrides/stateless_only.yaml
