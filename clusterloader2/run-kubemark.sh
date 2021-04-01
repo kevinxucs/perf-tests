@@ -21,7 +21,7 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     --testconfig=${TEST_CONFIG[$test]} \
     --provider=kubemark \
     --provider-configs="ROOT_KUBECONFIG=$HOME/.kube/config" \
-    --nodes=60 \
+    --nodes=180 \
     --report-dir=report_${test}_kubemark-cluster \
     --masterip=k8s-km-01.intern.kevxu.net \
     --etcd-certificate=/etc/kubernetes/pki/apiserver-etcd-client.crt \
