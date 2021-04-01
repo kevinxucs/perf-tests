@@ -53,6 +53,9 @@ tuningSets:
 - name: Uniform10qps
   qpsLoad:
     qps: 10
+- name: Uniform100qps
+  qpsLoad:
+    qps: 100
 {{if $ENABLE_CHAOSMONKEY}}
 chaosMonkey:
   nodeFailure:
@@ -124,7 +127,7 @@ steps:
       min: 1
       max: {{$namespaces}}
     replicasPerNamespace: 1
-#    tuningSet: Uniform10qps
+    tuningSet: Uniform100qps
     objectBundle:
     - basename: saturation-deployment
       objectTemplatePath: {{$saturationDeploymentSpec}}
@@ -176,7 +179,7 @@ steps:
       min: 1
       max: {{$namespaces}}
     replicasPerNamespace: {{$latencyReplicas}}
-#    tuningSet: Uniform10qps
+    tuningSet: Uniform100qps
     objectBundle:
     - basename: latency-deployment
       objectTemplatePath: {{$latencyDeploymentSpec}}
