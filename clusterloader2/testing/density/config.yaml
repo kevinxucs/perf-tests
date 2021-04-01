@@ -124,7 +124,7 @@ steps:
       min: 1
       max: {{$namespaces}}
     replicasPerNamespace: 1
-    tuningSet: Uniform10qps
+#    tuningSet: Uniform10qps
     objectBundle:
     - basename: saturation-deployment
       objectTemplatePath: {{$saturationDeploymentSpec}}
@@ -176,7 +176,7 @@ steps:
       min: 1
       max: {{$namespaces}}
     replicasPerNamespace: {{$latencyReplicas}}
-    tuningSet: Uniform10qps
+#    tuningSet: Uniform10qps
     objectBundle:
     - basename: latency-deployment
       objectTemplatePath: {{$latencyDeploymentSpec}}
