@@ -53,6 +53,9 @@ tuningSets:
 - name: Uniform10qps
   qpsLoad:
     qps: 10
+- name: Uniform50qps
+  qpsLoad:
+    qps: 50
 - name: Uniform100qps
   qpsLoad:
     qps: 100
@@ -127,7 +130,7 @@ steps:
       min: 1
       max: {{$namespaces}}
     replicasPerNamespace: 1
-    tuningSet: Uniform100qps
+    tuningSet: Uniform50qps
     objectBundle:
     - basename: saturation-deployment
       objectTemplatePath: {{$saturationDeploymentSpec}}
@@ -179,7 +182,7 @@ steps:
       min: 1
       max: {{$namespaces}}
     replicasPerNamespace: {{$latencyReplicas}}
-    tuningSet: Uniform100qps
+    tuningSet: Uniform50qps
     objectBundle:
     - basename: latency-deployment
       objectTemplatePath: {{$latencyDeploymentSpec}}
