@@ -21,7 +21,7 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     --provider=kubemark \
     --provider-configs="ROOT_KUBECONFIG=$HOME/.kube/gcloud-config" \
     --nodes=10 \
-    --report-dir=report_${test}_kubemark-cluster \
+    --report-dir=report_${test}_kubemark-gcloud-cluster \
     --masterip=34.122.28.250 \
     --etcd-certificate=/etc/kubernetes/pki/apiserver-etcd-client.crt \
     --etcd-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
