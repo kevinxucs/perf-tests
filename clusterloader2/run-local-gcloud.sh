@@ -12,7 +12,7 @@ if [[ -z "$test" ]]; then
     exit 0
 fi
 
-MASTER_IP="35.238.199.159"
+MASTER_IP="104.197.146.205"
 ETCD_IP="${MASTER_IP}"
 
 ETCD_CERTIFICATE=/etc/kubernetes/pki/etcd/server.crt \
