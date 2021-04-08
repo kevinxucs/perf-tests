@@ -19,10 +19,10 @@ ETCD_CERTIFICATE=/etc/kubernetes/pki/etcd/server.crt \
 ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     go run cmd/clusterloader.go \
     -v=4 \
-    --kubeconfig=$HOME/.kube/km-gcloud-config \
+    --kubeconfig=$HOME/.kube/km-config \
     --testconfig=${TEST_CONFIG[$test]} \
     --provider=kubemark \
-    --provider-configs="ROOT_KUBECONFIG=$HOME/.kube/gcloud-config" \
+    --provider-configs="ROOT_KUBECONFIG=$HOME/.kube/config" \
     --nodes=10 \
     --report-dir=report_${test}_kubemark-gcloud-cluster \
     --masterip=${MASTER_IP} \
