@@ -12,6 +12,8 @@ if [[ -z "$test" ]]; then
     exit 0
 fi
 
+readonly MASTER_IP="35.226.200.155"
+
 ETCD_CERTIFICATE=/etc/kubernetes/pki/etcd/server.crt \
 ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     go run cmd/clusterloader.go \
@@ -22,7 +24,7 @@ ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     --provider-configs="ROOT_KUBECONFIG=$HOME/.kube/gcloud-config" \
     --nodes=10 \
     --report-dir=report_${test}_kubemark-gcloud-cluster \
-    --masterip=34.122.28.250 \
+    --masterip=${MASTER_IP} \
     --etcd-certificate=/etc/kubernetes/pki/apiserver-etcd-client.crt \
     --etcd-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
     --enable-prometheus-server \
