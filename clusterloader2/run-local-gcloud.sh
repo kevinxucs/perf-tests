@@ -15,6 +15,7 @@ fi
 readonly MASTER_IP="34.71.31.158"
 readonly ETCD_IP="${MASTER_IP}"
 
+KUBE_SSH_USER=root \
 ETCD_CERTIFICATE=/etc/kubernetes/pki/etcd/server.crt \
 ETCD_KEY=/etc/kubernetes/pki/etcd/server.key \
     go run cmd/clusterloader.go \
