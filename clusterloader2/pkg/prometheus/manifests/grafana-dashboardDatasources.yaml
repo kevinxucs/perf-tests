@@ -10,12 +10,12 @@ stringData:
         "apiVersion": 1,
         "datasources": [
             {
-                "access": "proxy",
+                "access": "direct",
                 "editable": true,
                 "name": "prometheus",
                 "orgId": 1,
                 "type": "prometheus",
-                "url": "http://prometheus-k8s.monitoring.svc:9090",
+                "url": "http://127.0.0.1:9090",
                 "version": 1,
                 "jsonData": {
                   "timeInterval": "5s",
