@@ -16,6 +16,7 @@ metadata:
     ControlPlane: stateless-compute-platform
     environment: production
     service: {{.Name}}
+    group: {{.Group}}
   name: {{.Name}}
 spec:
   progressDeadlineSeconds: 600
