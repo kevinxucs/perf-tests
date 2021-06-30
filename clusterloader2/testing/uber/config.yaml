@@ -37,7 +37,7 @@
 # failure won't fail the test. See https://github.com/kubernetes/kubernetes/issues/73461#issuecomment-467338711
 {{$saturationDeploymentHardTimeout := MaxInt $saturationDeploymentTimeout 1200}}
 
-{{$saturationDeploymentSpec := DefaultParam .SATURATION_DEPLOYMENT_SPEC "statefulset/statefulset.yaml"}}
+{{$saturationDeploymentSpec := DefaultParam .SATURATION_DEPLOYMENT_SPEC "deployment.yaml"}}
 
 # Probe measurements shared parameter
 {{$PROBE_MEASUREMENTS_CHECK_PROBES_READY_TIMEOUT := DefaultParam .CL2_PROBE_MEASUREMENTS_CHECK_PROBES_READY_TIMEOUT "15m"}}
