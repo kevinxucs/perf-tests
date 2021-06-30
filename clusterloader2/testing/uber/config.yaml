@@ -4,7 +4,7 @@
 
 #Constants
 {{$NAMESPACES := 1}}
-{{$DEPLOYMENTS_PER_NAMESPACE := 5000}}
+{{$DEPLOYMENTS_PER_NAMESPACE := 50}}
 {{$TOTAL_PODS := 150000}}
 {{$DENSITY_RESOURCE_CONSTRAINTS_FILE := DefaultParam .DENSITY_RESOURCE_CONSTRAINTS_FILE ""}}
 # Cater for the case where the number of nodes is less than nodes per namespace. See https://github.com/kubernetes/perf-tests/issues/887
