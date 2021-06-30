@@ -19,6 +19,7 @@ metadata:
     group: {{.Group}}
   name: {{.Name}}
 spec:
+  serviceName: {{.Name}}
   replicas: {{.Replicas}}
   revisionHistoryLimit: 10
   selector:
