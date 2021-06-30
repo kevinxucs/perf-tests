@@ -125,7 +125,7 @@ steps:
           - basename: saturation-deployment
             objectTemplatePath: {{$saturationDeploymentSpec}}
             templateFillMap:
-              Replicas: {{$podsPerNamespace}}
+              Replicas: {{$podsPerDeployment}}
               Group: saturation
               CpuRequest: 1m
               MemoryRequest: 10M
