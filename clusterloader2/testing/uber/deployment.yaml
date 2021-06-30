@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    BuildID: 127.0.0.1:5055/uber-usi/test-compute-poc-service:phx2-produ-1623249274-bf1fe
+    ClusterID: las99-kubernetes-stateless01
+    ControlPlane: stateless-compute-platform
+    PartitionID: compute-0
+    RegionID: kubernetes
+    ZoneID: kubernetes1
+    com.uber.up.platform_version: 2.2.0
+    deployment.kubernetes.io/revision: "1"
+    environment: production
+    service: {{.Name}}
+  labels:
+    ControlPlane: stateless-compute-platform
+    environment: production
+    service: {{.Name}}
+  name: {{.Name}}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{.Replicas}}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      service: {{.Name}}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        ControlPlane: stateless-compute-platform
+        PartitionID: compute-0
+        com.scheduler.pod.name: dynamic
+        com.scheduler.port.grpc: dynamic
+        com.scheduler.port.http: dynamic
+        com.scheduler.port.system: dynamic
+        com.scheduler.port.tchannel: dynamic
+        com.scheduler.udeploy.instanceid: dynamic
+        com.uber.revocable: "false"
+        com.uber.scp.service.id: {{.Name}}
+        com.uber.secrets_volume_name: usecrets
+        com.uber.spiffe: lsb/workload/udeploy/{{.Name}}/{{.Name}}/production
+        com.uber.up.service.tier: "5"
+        environment: production
+        org.apache.aurora.metadata.job_number: "2"
+        org.apache.aurora.metadata.udeploy: '{"svc_pconfig_dict":{"tier":5}}'
+        org.apache.aurora.metadata.udeploy_task: '{"application_id":"{{.Name}}","cluster_name":"las99-kubernetes-stateless01","deployment_id":"production","service_id":"{{.Name}}"}'
+        org.apache.aurora.metadata.uns: '["/las99-kubernetes-stateless01/us1/{{.Name}}/production/compute-0"]'
+        org.apache.aurora.metadata.usecrets.enable: "true"
+        org.apache.aurora.metadata.usecrets.mount: '{"container_path":"/secrets","host_path":"/secrets/compute/{{.Name}}/production/{{.Name}}","use_tmpfs":false}'
+        org.apache.aurora.metadata.usecrets.regional: "true"
+        service: {{.Name}}
+      labels:
+        ControlPlane: stateless-compute-platform
+        PartitionID: compute-0
+        environment: production
+        service: {{.Name}}
+      name: {{.Name}}.pod
+    spec:
+      containers:
+        - env:
+            - name: SECRETS_PATH
+              value: /secrets/current/test-compute-poc-service
+            - name: UBER_CLUSTER
+              value: las99-kubernetes-stateless01
+            - name: UBER_DATACENTER
+              value: kubernetes1
+            - name: UBER_ENVIRONMENT
+              value: production
+            - name: UBER_IS_CRANE_ZONE
+              value: "true"
+            - name: UBER_IS_REVOCABLE
+              value: "false"
+            - name: UBER_PARTITION
+              value: compute-0
+            - name: UBER_PIPELINE
+              value: us1
+            - name: UBER_REGION
+              value: kubernetes
+            - name: UBER_RUNTIME_ENVIRONMENT
+              value: production
+            - name: UBER_TCHANNEL_HEALTH_PORT_LOCATION
+              value: /var/cache/udocker/test-compute-poc-service/.tchannel-health-port-test-compute-poc-service
+            - name: UBER_TIER
+              value: "5"
+            - name: UBER_ZONE
+              value: kubernetes1
+            - name: UDEPLOY_APP_ID
+              value: {{.Name}}
+            - name: UDEPLOY_DEPLOYMENT_NAME
+              value: production
+            - name: UDEPLOY_SERVICE_NAME
+              value: {{.Name}}
+            - name: KUBERNETES_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.annotations['com.scheduler.pod.name']
+            - name: UDEPLOY_INSTANCE_ID
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.annotations['com.scheduler.udeploy.instanceid']
+            - name: UBER_PORT_GRPC
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.annotations['com.scheduler.port.grpc']
+            - name: UBER_PORT_HTTP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.annotations['com.scheduler.port.http']
+            - name: UBER_PORT_TCHANNEL
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.annotations['com.scheduler.port.tchannel']
+            - name: UBER_PORT_SYSTEM
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.annotations['com.scheduler.port.system']
+          image: k8s.gcr.io/pause:3.1
+          imagePullPolicy: IfNotPresent
+          name: primary
+          resources:
+            limits:
+              cpu: {{.CpuRequest}}
+              memory: {{.MemoryRequest}}
+            requests:
+              cpu: {{.CpuRequest}}
+              memory: {{.MemoryRequest}}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
