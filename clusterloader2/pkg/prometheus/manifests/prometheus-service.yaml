@@ -6,11 +6,12 @@ metadata:
   name: prometheus-k8s
   namespace: monitoring
 spec:
+  type: NodePort
   ports:
   - name: web
     port: 9090
-    targetPort: web
+    targetPort: 9090
   selector:
     app: prometheus
     prometheus: k8s
-  sessionAffinity: ClientIP
+  #sessionAffinity: ClientIP
