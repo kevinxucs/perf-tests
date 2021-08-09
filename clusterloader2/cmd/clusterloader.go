@@ -83,6 +83,7 @@ func initClusterFlags() {
 	flags.StringEnvVar(&clusterLoaderConfig.ClusterConfig.MasterName, "mastername", "MASTER_NAME", "", "Name of the masternode")
 	// TODO(#595): Change the name of the MASTER_IP and MASTER_INTERNAL_IP flags and vars to plural
 	flags.StringSliceEnvVar(&clusterLoaderConfig.ClusterConfig.MasterIPs, "masterip", "MASTER_IP", nil /*defaultValue*/, "Hostname/IP of the master node, supports multiple values when separated by commas")
+	flags.StringSliceEnvVar(&clusterLoaderConfig.ClusterConfig.EtcdIPs, "etcdip", "ETCD_IP", nil /*defaultValue*/, "Hostname/IP of the etcd node, supports multiple values when separated by commas")
 	flags.StringSliceEnvVar(&clusterLoaderConfig.ClusterConfig.MasterInternalIPs, "master-internal-ip", "MASTER_INTERNAL_IP", nil /*defaultValue*/, "Cluster internal/private IP of the master vm, supports multiple values when separated by commas")
 	flags.BoolEnvVar(&clusterLoaderConfig.ClusterConfig.APIServerPprofByClientEnabled, "apiserver-pprof-by-client-enabled", "APISERVER_PPROF_BY_CLIENT_ENABLED", true, "Whether apiserver pprof endpoint can be accessed by Kubernetes client.")
 
@@ -166,6 +167,10 @@ func completeConfig(m *framework.MultiClientSet) error {
 		} else {
 			klog.Errorf("Getting master external ip error: %v", err)
 		}
+	}
+	if len(clusterLoaderConfig.ClusterConfig.EtcdIPs) == 0 {
+		clusterLoaderConfig.ClusterConfig.EtcdIPs = clusterLoaderConfig.ClusterConfig.MasterIPs
+		klog.V(0).Infof("ClusterConfig.EtcdIPs set to %v", clusterLoaderConfig.ClusterConfig.EtcdIPs)
 	}
 	if len(clusterLoaderConfig.ClusterConfig.MasterInternalIPs) == 0 {
 		masterIPs, err := util.GetMasterIPs(m.GetClient(), corev1.NodeInternalIP)

@@ -73,7 +73,7 @@ func (e *etcdMetricsMeasurement) Execute(config *measurement.Config) ([]measurem
 		return nil, err
 	}
 
-	hosts := config.ClusterFramework.GetClusterConfig().MasterIPs
+	hosts := config.ClusterFramework.GetClusterConfig().EtcdIPs
 	if len(hosts) < 1 {
 		klog.Warningf("ETCD measurements will be disabled due to no MasterIps: %v", hosts)
 		return nil, nil
