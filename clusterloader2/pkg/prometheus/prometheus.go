@@ -18,9 +18,11 @@ package prometheus
 
 import (
 	"context"
+	b64 "encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"time"
 
@@ -159,8 +161,14 @@ func NewController(clusterLoaderConfig *config.ClusterLoaderConfig) (pc *Control
 
 	mapping["PROMETHEUS_KUBECONFIG"] = ""
 
-	if _, exists := mapping["PROMETHEUS_KUBECONFIG_BASE64"]; !exists {
-		if clusterLoaderConfig.PrometheusConfig.KubeConfigPath != ""
+	if _, exists := mapping["PROMETHEUS_KUBECONFIG_BASE64"]; !exists && clusterLoaderConfig.PrometheusConfig.KubeConfigPath != "" {
+		data, err := ioutil.ReadFile(clusterLoaderConfig.PrometheusConfig.KubeConfigPath)
+		if err != nil {
+			return nil, err
+		}
+
+		kubeConfigBase64 := b64.StdEncoding.EncodeToString(data)
+		mapping["PROMETHEUS_KUBECONFIG_BASE64"] = kubeConfigBase64
 	}
 
 	pc.templateMapping = mapping
