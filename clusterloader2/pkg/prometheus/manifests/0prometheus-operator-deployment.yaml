@@ -24,6 +24,11 @@ spec:
         app.kubernetes.io/name: prometheus-operator
         app.kubernetes.io/part-of: kube-prometheus
         app.kubernetes.io/version: 0.46.0
+      annotations:
+        com.scheduler.port.http: dynamic
+        com.scheduler.port.system: dynamic
+        com.scheduler.port.grpc: dynamic
+        com.scheduler.port.tchannel: dynamic
     spec:
       containers:
       - args:
@@ -34,9 +39,6 @@ spec:
         - --secret-field-selector=type=prometheus-alert
         image: gcr.io/k8s-testimages/quay.io/prometheus-operator/prometheus-operator:v0.46.0
         name: prometheus-operator
-        ports:
-        - containerPort: 8080
-          name: http
         resources:
           limits:
             cpu: 200m
@@ -53,3 +55,4 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
       serviceAccountName: prometheus-operator
+      hostNetwork: true
