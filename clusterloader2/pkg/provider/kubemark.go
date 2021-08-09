@@ -62,7 +62,7 @@ func (p *KubemarkProvider) GetConfig() Config {
 }
 
 func (p *KubemarkProvider) RunSSHCommand(cmd, host string) (string, string, int, error) {
-	signer, err := sshSignerFromKeyFile("KUBEMARK_SSH_KEY", "google_compute_engine")
+	signer, err := sshSignerFromKeyFile("LOCAL_SSH_KEY", "id_rsa")
 	if err != nil {
 		return "", "", 0, err
 	}
