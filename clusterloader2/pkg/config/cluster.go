@@ -83,6 +83,7 @@ type PrometheusConfig struct {
 	NodeExporterPod           string
 	StorageClassProvisioner   string
 	StorageClassVolumeType    string
+	KubeConfigPath            string
 }
 
 // GetMasterIP returns the first master ip, added for backward compatibility.

@@ -64,6 +64,7 @@ func InitFlags(p *config.PrometheusConfig) {
 	flags.StringEnvVar(&p.ManifestPath, "prometheus-manifest-path", "PROMETHEUS_MANIFEST_PATH", "$GOPATH/src/k8s.io/perf-tests/clusterloader2/pkg/prometheus/manifests", "Path to the prometheus manifest files.")
 	flags.StringEnvVar(&p.StorageClassProvisioner, "prometheus-storage-class-provisioner", "PROMETHEUS_STORAGE_CLASS_PROVISIONER", "kubernetes.io/gce-pd", "Volumes plugin used to provision PVs for Prometheus")
 	flags.StringEnvVar(&p.StorageClassVolumeType, "prometheus-storage-class-volume-type", "PROMETHEUS_STORAGE_CLASS_VOLUME_TYPE", "pd-ssd", "Volume types of storage class, This will be different depending on the provisioner")
+	flags.StringEnvVar(&p.KubeConfigPath, "prometheus-kubeconfig-path", "PROMETHEUS_KUBECONFIG_PATH", "", "Path to the kubeconfig file.")
 }
 
 // ValidatePrometheusFlags validates prometheus flags.
@@ -155,6 +156,12 @@ func NewController(clusterLoaderConfig *config.ClusterLoaderConfig) (pc *Control
 	mapping["PROMETHEUS_STORAGE_CLASS_VOLUME_TYPE"] = clusterLoaderConfig.PrometheusConfig.StorageClassVolumeType
 	snapshotEnabled, _ := pc.isEnabled()
 	mapping["RetainPD"] = snapshotEnabled
+
+	mapping["PROMETHEUS_KUBECONFIG"] = ""
+
+	if _, exists := mapping["PROMETHEUS_KUBECONFIG_BASE64"]; !exists {
+		if clusterLoaderConfig.PrometheusConfig.KubeConfigPath != ""
+	}
 
 	pc.templateMapping = mapping
 

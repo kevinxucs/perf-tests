@@ -49,6 +49,13 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
+        volumeMounts:
+        - name: kubeconfig-volume
+          mountPath: /kubeconfig
+          readOnly: true
+        env:
+        - name: KUBECONFIG
+          value: /kubeconfig/kubecofnig
       nodeSelector:
         kubernetes.io/os: linux
       securityContext:
@@ -56,3 +63,7 @@ spec:
         runAsUser: 65534
       serviceAccountName: prometheus-operator
       hostNetwork: true
+      volumes:
+      - name: kubeconfig-volume
+        secret:
+          secretName: kubeconfig
