@@ -37,6 +37,7 @@ spec:
         {{end}}
         - --prometheus-config-reloader=gcr.io/k8s-testimages/quay.io/prometheus-operator/prometheus-config-reloader:v0.46.0
         - --secret-field-selector=type=prometheus-alert
+        - --web.listen-address=:8181
         image: gcr.io/k8s-testimages/quay.io/prometheus-operator/prometheus-operator:v0.46.0
         name: prometheus-operator
         resources:
