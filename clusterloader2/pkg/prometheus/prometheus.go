@@ -33,6 +33,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog"
 	"k8s.io/perf-tests/clusterloader2/pkg/config"
 	clerrors "k8s.io/perf-tests/clusterloader2/pkg/errors"
@@ -173,6 +174,18 @@ func NewController(clusterLoaderConfig *config.ClusterLoaderConfig) (pc *Control
 
 		kubeConfigBase64 := b64.StdEncoding.EncodeToString(data)
 		mapping["PROMETHEUS_KUBECONFIG_BASE64"] = kubeConfigBase64
+	}
+
+	if _, exists := mapping["PROMETHEUS_APISERVER_URL"]; !exists && clusterLoaderConfig.PrometheusConfig.KubeConfigPath != "" {
+		kubeConfig, err := clientcmd.LoadFromFile(clusterLoaderConfig.PrometheusConfig.KubeConfigPath)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, cluster := range kubeConfig.Clusters {
+			mapping["PROMETHEUS_APISERVER_URL"] = cluster.Server
+			break
+		}
 	}
 
 	pc.templateMapping = mapping

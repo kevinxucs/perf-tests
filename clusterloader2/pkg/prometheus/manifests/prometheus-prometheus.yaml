@@ -1,5 +1,6 @@
 {{$PROMETHEUS_SCRAPE_KUBELETS := DefaultParam .PROMETHEUS_SCRAPE_KUBELETS false}}
 {{$PROMETHEUS_SCRAPE_WINDOWS_NODES := DefaultParam .PROMETHEUS_SCRAPE_WINDOWS_NODES false}}
+{{$PROMETHEUS_APISERVER_URL := DefaultParam .PROMETHEUS_APISERVER_URL ""}}
 
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -30,6 +31,11 @@ spec:
       # Start with 2Gi and add 2Gi for each 1K nodes.
       memory: {{MultiplyInt 2 (AddInt 1 (DivideInt .Nodes 1000))}}Gi
       {{end}}
+  apiserverConfig:
+    host: {{$PROMETHEUS_APISERVER_URL}}
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
   ruleSelector:
     matchLabels:
       prometheus: k8s
