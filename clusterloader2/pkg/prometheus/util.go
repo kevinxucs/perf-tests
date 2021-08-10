@@ -20,8 +20,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"regexp"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/klog"
 )
@@ -51,10 +54,11 @@ func CheckAllTargetsReady(k8sClient kubernetes.Interface, selector func(Target) 
 // CheckTargetsReady returns true iff there is at least minActiveTargets matching the selector and
 // at least minReadyTargets of them are ready.
 func CheckTargetsReady(k8sClient kubernetes.Interface, selector func(Target) bool, minActiveTargets, minReadyTargets int) (bool, error) {
-	raw, err := k8sClient.CoreV1().
-		Services(namespace).
-		ProxyGet("http", "prometheus-k8s", "9090", "api/v1/targets", nil /*params*/).
-		DoRaw(context.TODO())
+	// raw, err := k8sClient.CoreV1().
+	// 	Services(namespace).
+	// 	ProxyGet("http", "prometheus-k8s", "9090", "api/v1/targets", nil /*params*/).
+	// 	DoRaw(context.TODO())
+	raw, err := CallPrometheusNodePort(context.TODO(), k8sClient, "api/v1/targets", map[string]string{})
 	if err != nil {
 		response := "(empty)"
 		if raw != nil {
@@ -107,4 +111,61 @@ func VerifySnapshotName(name string) error {
 		return nil
 	}
 	return fmt.Errorf("disk name doesn't match %v", snapshotNamePattern)
+}
+
+// CallPrometheusNodePort calls prometheus through service NodePort
+func CallPrometheusNodePort(ctx context.Context, k8sClient kubernetes.Interface, path string, params map[string]string) ([]byte, error) {
+	svc, err := k8sClient.CoreV1().Services(namespace).Get(ctx, prometheusService, metav1.GetOptions{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get service: %v", err)
+	}
+
+	ports := svc.Spec.Ports
+	if len(ports) == 0 {
+		return nil, fmt.Errorf("found 0 ports for service \"%s\"", prometheusService)
+	}
+
+	nodePort := ports[0].NodePort
+	if nodePort == 0 {
+		return nil, fmt.Errorf("nodePort not found for service \"%s\"", prometheusService)
+	}
+
+	podName := prometheusService + "-0"
+	pod, err := k8sClient.CoreV1().Pods(namespace).Get(ctx, podName, metav1.GetOptions{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get pod: %v", err)
+	}
+
+	hostIP := pod.Status.HostIP
+	if len(hostIP) == 0 {
+		return nil, fmt.Errorf("hostIP not found for pod \"%s\"", podName)
+	}
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s://%s:%d/%s", "http", hostIP, nodePort, path), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request to call prometheus pod nodePort: %v", err)
+	}
+
+	q := req.URL.Query()
+	for k, v := range params {
+		q.Add(k, v)
+	}
+	req.URL.RawQuery = q.Encode()
+
+	client := http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to call prometheus pod nodePort: %v", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request to prometheus pod nodePort failed with status code: %d", resp.StatusCode)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read data from response body: %v", err)
+	}
+
+	return data, nil
 }

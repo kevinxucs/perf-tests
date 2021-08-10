@@ -30,6 +30,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog"
+	"k8s.io/perf-tests/clusterloader2/pkg/prometheus"
 )
 
 const (
@@ -108,10 +109,11 @@ func (e *PrometheusQueryExecutor) Query(query string, queryTime time.Time) ([]*m
 	}
 	klog.V(2).Infof("Executing %q at %v", query, queryTime.Format(time.RFC3339))
 	if err := wait.PollImmediate(queryInterval, queryTimeout, func() (bool, error) {
-		body, queryErr = e.client.CoreV1().
-			Services("monitoring").
-			ProxyGet("http", "prometheus-k8s", "9090", "api/v1/query", params).
-			DoRaw(context.TODO())
+		// body, queryErr = e.client.CoreV1().
+		// 	Services("monitoring").
+		// 	ProxyGet("http", "prometheus-k8s", "9090", "api/v1/query", params).
+		// 	DoRaw(context.TODO())
+		body, queryErr = prometheus.CallPrometheusNodePort(context.TODO(), e.client, "api/v1/query", params)
 		if queryErr != nil {
 			return false, nil
 		}
