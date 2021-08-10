@@ -30,6 +30,11 @@ spec:
       # Start with 2Gi and add 2Gi for each 1K nodes.
       memory: {{MultiplyInt 2 (AddInt 1 (DivideInt .Nodes 1000))}}Gi
       {{end}}
+  apiserverConfig:
+    host: https://k8s-apiserver-kubernetes-benchmark01-bootstrap.dev1.uber.internal:6443
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
   ruleSelector:
     matchLabels:
       prometheus: k8s
