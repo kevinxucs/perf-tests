@@ -20,8 +20,8 @@ spec:
       port: 2379
     - name: etcd-2382
       port: 2382
-    - name: kubelet
-      port: 10250
+    #- name: kubelet
+    #  port: 10250
     - name: kube-scheduler
       port: 10259
     - name: kube-controller-manager
