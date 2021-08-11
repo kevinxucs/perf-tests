@@ -45,6 +45,7 @@ import (
 
 const (
 	namespace                    = "monitoring"
+	prometheusEndpoint           = "prometheus-k8s"
 	storageClass                 = "ssd"
 	checkPrometheusReadyInterval = 30 * time.Second
 	checkPrometheusReadyTimeout  = 15 * time.Minute
