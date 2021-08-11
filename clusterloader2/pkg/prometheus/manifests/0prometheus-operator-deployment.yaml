@@ -38,7 +38,7 @@ spec:
         - --prometheus-config-reloader=gcr.io/k8s-testimages/quay.io/prometheus-operator/prometheus-config-reloader:v0.46.0
         - --secret-field-selector=type=prometheus-alert
         - --web.listen-address=:8181
-        image: gcr.io/k8s-testimages/quay.io/prometheus-operator/prometheus-operator:v0.46.0
+        image: 127.0.0.1:5055/uber-system/prometheus-operator:phx2-produ-1628640109-a3075
         name: prometheus-operator
         resources:
           limits:
